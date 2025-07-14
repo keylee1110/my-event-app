@@ -5,7 +5,6 @@ on:
   pull_request:
     branches: [ main ]
 jobs:
-  # Job build backend
   build-backend:
     runs-on: ubuntu-latest
     steps:
@@ -18,10 +17,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Grant execute permission on Maven Wrapper
+        run: chmod +x backend/mvnw
+
       - name: Build Spring Boot
         working-directory: ./backend
-        run: |
-          ./mvnw clean package -DskipTests
+        run: ./mvnw clean package -DskipTests
+
 
   # Job build frontend, chạy sau backend
   build-frontend:
