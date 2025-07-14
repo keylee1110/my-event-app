@@ -21,7 +21,7 @@ jobs:
         run: chmod +x backend/mvnw
 
       - name: Build Spring Boot
-        working-directory: ./backend
+        working-directory: ./backend/eventapp-backend
         run: ./mvnw clean package -DskipTests
 
 
