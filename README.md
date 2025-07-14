@@ -9,12 +9,12 @@
 - **Docs**: SRS, API spec, wireframes…
 
 ## Cấu trúc thư mục
-my-event-app/
-├─ backend/   # Spring Boot app
-├─ frontend/  # Next.js client
-├─ docs/      # SRS, thiết kế
-├─ .gitignore
-└─ README.md
+- **my-event-app/**
+  - **backend/** – Spring Boot app  
+  - **frontend/** – Next.js client  
+  - **docs/** – SRS, thiết kế  
+  - **.gitignore**  
+  - **README.md**
 
 ## Cài đặt & Chạy
 1. **Clone repo**  
