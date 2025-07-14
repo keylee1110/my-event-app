@@ -19,7 +19,7 @@ jobs:
           java-version: '17'
 
       - name: Build Spring Boot
-        working-directory: ./backend
+        working-directory: ./backend/eventapp-backend
         run: |
           ./mvnw clean package -DskipTests
 
