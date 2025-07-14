@@ -10,9 +10,9 @@
 
 ## Cấu trúc thư mục
 my-event-app/
-├─ backend/ # Spring Boot app
-├─ frontend/ # Next.js client
-├─ docs/ # SRS, thiết kế
+├─ backend/   # Spring Boot app
+├─ frontend/  # Next.js client
+├─ docs/      # SRS, thiết kế
 ├─ .gitignore
 └─ README.md
 
