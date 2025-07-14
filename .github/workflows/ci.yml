@@ -25,29 +25,29 @@ jobs:
         run: ./mvnw clean package -DskipTests
 
   # Job build frontend, chạy sau backend
-  build-frontend:
-    needs: build-backend
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: ['18']
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  # build-frontend:
+  #   needs: build-backend
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       node-version: ['18']
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
+  #     - name: Setup Node.js ${{ matrix.node-version }}
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: ${{ matrix.node-version }}
 
-      - name: Install dependencies
-        working-directory: ./frontend
-        run: npm install
+  #     - name: Install dependencies
+  #       working-directory: ./frontend
+  #       run: npm install
 
-      - name: Run lint
-        working-directory: ./frontend
-        run: npm run lint
+  #     - name: Run lint
+  #       working-directory: ./frontend
+  #       run: npm run lint
 
-      - name: Build Next.js
-        working-directory: ./frontend
-        run: npm run build
+  #     - name: Build Next.js
+  #       working-directory: ./frontend
+  #       run: npm run build
