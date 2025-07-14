@@ -20,18 +20,9 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Grant execute permission on Maven Wrapper
-        run: chmod +x backend/mvnw
-
       - name: Build Spring Boot
         working-directory: ./backend/eventapp-backend
-<<<<<<< HEAD
         run: ./mvnw clean package -DskipTests
-
-=======
-        run: |
-          ./mvnw clean package -DskipTests
->>>>>>> 4a760f7b9b7b7c679acb949acbc0a7d67dd99d06
 
   # Job build frontend, chạy sau backend
   build-frontend:
