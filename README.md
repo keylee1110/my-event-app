@@ -1,5 +1,7 @@
 # My Event App
 
+[![CI](https://github.com/keylee1110/my-event-app/actions/workflows/ci.yml/badge.svg)](https://github.com/keylee1110/my-event-app/actions/workflows/ci.yml)
+
 ## Mô tả
 Ứng dụng quản lý sự kiện, bao gồm:
 - **Backend**: Spring Boot + MongoDB (package `com.yourcompany.eventapp`)
