@@ -3,54 +3,67 @@ package com.keylee1110.eventapp_backend.config;
 import io.jsonwebtoken.*;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
-import org.springframework.security.authentication.*;
-import org.springframework.security.core.Authentication;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.util.StringUtils;
-import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.security.core.userdetails.UserDetails;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Claims;
 
+
+import javax.crypto.SecretKey;
 import java.io.IOException;
 
-public class JwtAuthenticationFilter extends GenericFilterBean {
-    private final String secret;
-    private final UserDetailsService uds;
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    public JwtAuthenticationFilter(String secret, UserDetailsService uds) {
-        this.secret = secret;
-        this.uds = uds;
+    private final SecretKey signingKey;
+    private final UserDetailsService userDetailsService;
+
+    public JwtAuthenticationFilter(SecretKey signingKey,
+                                   UserDetailsService userDetailsService) {
+        this.signingKey = signingKey;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
-            throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) req;
-        String token = parseToken(request);
-        if (token != null) {
-            try {
-                Jws<Claims> claims = Jwts.parser()
-                        .setSigningKey(secret.getBytes())
-                        .build()
-                        .parseClaimsJws(token);
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain chain)
+            throws ServletException, IOException {
 
-                String username = claims.getBody().getSubject();
-                var userDetails = uds.loadUserByUsername(username);
-                Authentication auth = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
+        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (header == null || !header.startsWith("Bearer ")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        String token = header.substring(7).trim();
+        try {
+            // parse & verify token
+            Jws<Claims> jws = Jwts.parser()
+                    .setSigningKey(signingKey)
+                    .build()
+                    .parseClaimsJws(token);
+
+            String username = jws.getBody().getSubject();
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities()
+                        );
                 SecurityContextHolder.getContext().setAuthentication(auth);
-
-            } catch (JwtException e) {
-                // invalid token — bạn có thể log hoặc trả 401
             }
+        } catch (JwtException | IllegalArgumentException ex) {
+            SecurityContextHolder.clearContext();
         }
-        chain.doFilter(req, res);
-    }
 
-    private String parseToken(HttpServletRequest req) {
-        String header = req.getHeader("Authorization");
-        if (StringUtils.hasText(header) && header.startsWith("Bearer ")) {
-            return header.substring(7);
-        }
-        return null;
+        chain.doFilter(request, response);
     }
 }

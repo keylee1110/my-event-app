@@ -13,6 +13,6 @@ public class User {
     @Id
     private String id;
     private String username;
-    private String password;       // sẽ lưu dưới dạng mã hóa
-    private List<String> roles;    // e.g. ["ROLE_USER", "ROLE_ADMIN"]
+    private String password;
+    private List<String> roles;
 }
