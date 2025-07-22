@@ -1,8 +1,7 @@
-package com.keylee1110.eventapp_backend.controller;
+package com.keylee1110.eventapp_backend.service;
 
 import com.keylee1110.eventapp_backend.model.Event;
 import com.keylee1110.eventapp_backend.repository.EventRepository;
-import com.keylee1110.eventapp_backend.service.EventServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;

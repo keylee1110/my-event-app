@@ -17,9 +17,9 @@ import java.util.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired private AuthenticationManager authManager;
-    @Autowired private UserRepository userRepo;
-    @Autowired private PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authManager;
+    private final UserRepository userRepo;
+    private final PasswordEncoder passwordEncoder;
     private final SecretKey jwtSigningKey;
 
     public AuthController(AuthenticationManager authManager,
@@ -51,7 +51,7 @@ public class AuthController {
         );
 
         String token = Jwts.builder()
-                .setSubject(u.getUsername())
+                .setSubject(auth.getName())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 3_600_000)) // 1h
                 .signWith(jwtSigningKey)  // dùng SecretKey
